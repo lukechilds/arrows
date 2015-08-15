@@ -2,6 +2,7 @@
 [ -z "$THEME_EXTRA_NEWLINE" ] && THEME_EXTRA_NEWLINE=1
 [ -z "$THEME_SHOW_CWD" ] && THEME_SHOW_CWD=1
 [ -z "$THEME_CWD_LENGTH" ] && THEME_CWD_LENGTH=1
+[ -z "$THEME_SHOW_PROMPT" ] && THEME_SHOW_PROMPT=1
 
 # Outputs prompt string
 theme_build_prompt() {
@@ -23,8 +24,10 @@ theme_build_prompt() {
   fi
 
   # Prompt symbol
-  [[ $root == 1 ]] && prompt_colour=red || prompt_colour=blue
-  echo -n "%F{${prompt_colour}}%#%f "
+  if [ $THEME_SHOW_PROMPT == 1 ]; then
+    [[ $root == 1 ]] && prompt_colour=red || prompt_colour=blue
+    echo -n "%F{${prompt_colour}}%#%f "
+  fi
 
   # Arrows
   arrows=(red yellow green)
