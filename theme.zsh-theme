@@ -4,6 +4,7 @@
 [ -z "$THEME_CWD_LENGTH" ] && THEME_CWD_LENGTH=1
 [ -z "$THEME_SHOW_PROMPT" ] && THEME_SHOW_PROMPT=1
 [ -z "$THEME_SHOW_ARROWS" ] && THEME_SHOW_ARROWS=1
+[ -z "$THEME_ARROW_COLOURS" ] && THEME_ARROW_COLOURS=(red yellow green)
 
 # Outputs prompt string
 theme_build_prompt() {
@@ -32,12 +33,11 @@ theme_build_prompt() {
 
   # Arrows
   if [ $THEME_SHOW_ARROWS == 1 ]; then
-    arrows=(red yellow green)
     if [ $THEME_SHOW_CWD == 1 ] || [ $THEME_SHOW_PROMPT == 1 ]; then
       echo -n "${newline}"
     fi
     echo -n "%B"
-    for colour in $arrows; do
+    for colour in $THEME_ARROW_COLOURS; do
       echo -n "%F{$colour}›%f"
     done
     echo -n "%b "
