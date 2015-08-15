@@ -40,11 +40,8 @@ theme_build_prompt() {
     for colour in $arrows; do
       echo -n "%F{$colour}›%f"
     done
-    echo -n "%b"
+    echo -n "%b "
   fi
-
-  # End with space
-  echo -n " "
 
 }
 
