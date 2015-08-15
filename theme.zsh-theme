@@ -20,7 +20,8 @@ theme_build_prompt() {
   echo -n "%F{magenta}%${THEME_CWD_LENGTH}~%f "
 
   # Prompt symbol
-  echo -n "%F{blue}%#%f "
+  [[ $root == 1 ]] && prompt_colour=red || prompt_colour=blue
+  echo -n "%F{${prompt_colour}}%#%f "
 
   # Arrows
   arrows=(red yellow green)
