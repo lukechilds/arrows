@@ -5,6 +5,9 @@
 # Outputs prompt string
 theme_build_prompt() {
 
+  # Check if we're root
+  [[ $(print -P "%#") == '#' ]] && root=1 || root=0
+
   # Easy use of linebreaks
   newline=$'\n'
 
