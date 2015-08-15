@@ -31,7 +31,9 @@ theme_build_prompt() {
 
   # Arrows
   arrows=(red yellow green)
-  echo -n "${newline}"
+  if [ $THEME_SHOW_CWD == 1 ] || [ $THEME_SHOW_PROMPT == 1 ]; then
+    echo -n "${newline}"
+  fi
   echo -n "%B"
   for colour in $arrows; do
     echo -n "%F{$colour}›%f"
