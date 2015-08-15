@@ -1,5 +1,6 @@
 # Set default options
 [ -z "$THEME_EXTRA_NEWLINE" ] && THEME_EXTRA_NEWLINE=1
+[ -z "$THEME_SHOW_CWD" ] && THEME_SHOW_CWD=1
 [ -z "$THEME_CWD_LENGTH" ] && THEME_CWD_LENGTH=1
 
 # Outputs prompt string
@@ -17,7 +18,9 @@ theme_build_prompt() {
   fi
 
   # Current working directory
-  echo -n "%F{magenta}%${THEME_CWD_LENGTH}~%f "
+  if [ $THEME_SHOW_CWD == 1 ]; then
+    echo -n "%F{magenta}%${THEME_CWD_LENGTH}~%f "
+  fi
 
   # Prompt symbol
   [[ $root == 1 ]] && prompt_colour=red || prompt_colour=blue
