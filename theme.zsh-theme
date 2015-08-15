@@ -3,6 +3,7 @@
 [ -z "$THEME_SHOW_CWD" ] && THEME_SHOW_CWD=1
 [ -z "$THEME_CWD_LENGTH" ] && THEME_CWD_LENGTH=1
 [ -z "$THEME_SHOW_PROMPT" ] && THEME_SHOW_PROMPT=1
+[ -z "$THEME_SHOW_ARROWS" ] && THEME_SHOW_ARROWS=1
 
 # Outputs prompt string
 theme_build_prompt() {
@@ -30,15 +31,17 @@ theme_build_prompt() {
   fi
 
   # Arrows
-  arrows=(red yellow green)
-  if [ $THEME_SHOW_CWD == 1 ] || [ $THEME_SHOW_PROMPT == 1 ]; then
-    echo -n "${newline}"
+  if [ $THEME_SHOW_ARROWS == 1 ]; then
+    arrows=(red yellow green)
+    if [ $THEME_SHOW_CWD == 1 ] || [ $THEME_SHOW_PROMPT == 1 ]; then
+      echo -n "${newline}"
+    fi
+    echo -n "%B"
+    for colour in $arrows; do
+      echo -n "%F{$colour}›%f"
+    done
+    echo -n "%b"
   fi
-  echo -n "%B"
-  for colour in $arrows; do
-    echo -n "%F{$colour}›%f"
-  done
-  echo -n "%b"
 
   # End with space
   echo -n " "
