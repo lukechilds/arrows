@@ -27,12 +27,12 @@ get_git_status() {
   fi
 
   # Check for unstaged changes
-  if git status --porcelain | grep -q -e '^??' -e '^ M' -e '^ D'; then
+  if echo $git_status | grep -q -e '^??' -e '^ M' -e '^ D'; then
     git_unstaged=1
   fi
 
   # Check for staged changes
-  if git status --porcelain | grep -q -e '^A' -e '^M' -e '^D' -e '^R'; then
+  if echo $git_status | grep -q -e '^A' -e '^M' -e '^D' -e '^R'; then
     git_staged=1
   fi
 
