@@ -27,7 +27,7 @@ get_git_status() {
   fi
 
   # Check for unstaged changes
-  if echo $git_status | grep -q -e '^??' -e '^ M' -e '^ D'; then
+  if echo $git_status | grep -q -e '^A[M|D]' -e '^M[M|D]' -e '^DM' -e '^R[M|D]' -e '^??' -e '^ M' -e '^ D'; then
     git_unstaged=1
   fi
 
