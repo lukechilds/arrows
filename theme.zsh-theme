@@ -77,7 +77,7 @@ theme_build_prompt() {
       if [ $in_git_repo == 1 ] && [ $THEME_ARROW_GIT_STATUS == 1 ]; then
         if [ $git_unstaged == 1 ] && [ $git_staged == 1 ]; then
           [[ $arrow == 1 ]] && arrowcolour=red
-          [[ $arrow == 2 ]] && arrowcolour=green
+          [[ $arrow == 2 ]] && arrowcolour=red
           [[ $arrow == 3 ]] && arrowcolour=green
         elif [ $git_unstaged == 1 ]; then
           arrowcolour=red
