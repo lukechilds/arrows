@@ -17,16 +17,14 @@ get_git_status() {
   git_unstaged=0
   git_staged=0
 
-  # Check if we're in a repo
-  if git rev-parse --git-dir > /dev/null 2>&1; then
+  # Cache status if we're in a repo
+  if git_status=$(git status --porcelain 2>/dev/null); then
     in_git_repo=1
   else
+    # If not stop everything
     in_git_repo=0
     return
   fi
-
-  # Cache status
-  git_status=$(git status --porcelain 2>/dev/null)
 
   # Check for unstaged changes
   if git status --porcelain | grep -q -e '^??' -e '^ M' -e '^ D'; then
