@@ -13,21 +13,29 @@ setopt PROMPT_SUBST
 # Get git status
 get_git_status() {
 
+  # Set defaults
+  git_unstaged=0
+  git_staged=0
+
+  # Check if we're in a repo
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    in_git_repo=1
+  else
+    in_git_repo=0
+    return
+  fi
+
   # Cache status
   git_status=$(git status --porcelain 2>/dev/null)
 
   # Check for unstaged changes
   if git status --porcelain | grep -q -e '^??' -e '^ M' -e '^ D'; then
     git_unstaged=1
-  else
-    git_unstaged=0
   fi
 
   # Check for staged changes
   if git status --porcelain | grep -q -e '^A' -e '^M' -e '^D' -e '^R'; then
     git_staged=1
-  else
-    git_staged=0
   fi
 
 }
@@ -68,7 +76,7 @@ theme_build_prompt() {
     for default_colour in $THEME_ARROW_COLOURS; do
       arrow=$((arrow + 1))
       arrowcolour=$default_colour
-      if [ $THEME_ARROW_GIT_STATUS == 1 ]; then
+      if [ $in_git_repo == 1 ] && [ $THEME_ARROW_GIT_STATUS == 1 ]; then
         if [ $git_unstaged == 1 ] && [ $git_staged == 1 ]; then
           [[ $arrow == 1 ]] && arrowcolour=red
           [[ $arrow == 2 ]] && arrowcolour=green
