@@ -1,3 +1,6 @@
+# Enable command substitution
+setopt PROMPT_SUBST
+
 # Set default options
 [ -z "$THEME_EXTRA_NEWLINE" ] && THEME_EXTRA_NEWLINE=1
 [ -z "$THEME_SHOW_CWD" ] && THEME_SHOW_CWD=1
@@ -5,6 +8,30 @@
 [ -z "$THEME_SHOW_PROMPT" ] && THEME_SHOW_PROMPT=1
 [ -z "$THEME_SHOW_ARROWS" ] && THEME_SHOW_ARROWS=1
 [ -z "$THEME_ARROW_COLOURS" ] && THEME_ARROW_COLOURS=(red yellow green)
+[ -z "$THEME_ARROW_GIT_STATUS" ] && THEME_ARROW_GIT_STATUS=1
+
+# Get git status
+get_git_status() {
+
+  # Cache status
+  git_status=$(git status --porcelain 2>/dev/null)
+
+  # Check for unstaged changes
+  if git status --porcelain | grep -q -e '^??' -e '^ M' -e '^ D'; then
+    git_unstaged=1
+  else
+    git_unstaged=0
+  fi
+
+  # Check for staged changes
+  if git status --porcelain | grep -q -e '^A' -e '^M' -e '^D' -e '^R'; then
+    git_staged=1
+  else
+    git_staged=0
+  fi
+
+}
+precmd_functions=(get_git_status)
 
 # Outputs prompt string
 theme_build_prompt() {
@@ -37,12 +64,27 @@ theme_build_prompt() {
       echo -n "${newline}"
     fi
     echo -n "%B"
-    for colour in $THEME_ARROW_COLOURS; do
-      echo -n "%F{$colour}›%f"
+    arrow=0
+    for default_colour in $THEME_ARROW_COLOURS; do
+      arrow=$((arrow + 1))
+      arrowcolour=$default_colour
+      if [ $THEME_ARROW_GIT_STATUS == 1 ]; then
+        if [ $git_unstaged == 1 ] && [ $git_staged == 1 ]; then
+          [[ $arrow == 1 ]] && arrowcolour=red
+          [[ $arrow == 2 ]] && arrowcolour=green
+          [[ $arrow == 3 ]] && arrowcolour=green
+        elif [ $git_unstaged == 1 ]; then
+          arrowcolour=red
+        elif [ $git_staged == 1 ]; then
+          arrowcolour=green
+        fi
+      fi
+      echo -n "%F{$arrowcolour}›%f"
     done
     echo -n "%b "
   fi
 
 }
 
-PROMPT=$(theme_build_prompt)
+# Rebuild prompt every time
+PROMPT='$(theme_build_prompt)'
