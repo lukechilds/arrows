@@ -29,7 +29,7 @@ get_git_status() {
   fi
 
   # Get branch
-  git_branch=$(echo $git_status | grep '^##' | cut -c 4-)
+  git_branch=$(echo $git_status | grep '^##' | cut -c 4- | awk '{sub(/\.\..*/,""); print}')
 
   # Check for unstaged changes
   if echo $git_status | grep -q -e '^A[M|D]' -e '^M[M|D]' -e '^DM' -e '^R[M|D]' -e '^??' -e '^ M' -e '^ D'; then
