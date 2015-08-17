@@ -9,22 +9,27 @@ setopt PROMPT_SUBST
 [ -z "$THEME_SHOW_ARROWS" ] && THEME_SHOW_ARROWS=1
 [ -z "$THEME_ARROW_COLOURS" ] && THEME_ARROW_COLOURS=(red yellow green)
 [ -z "$THEME_ARROW_GIT_STATUS" ] && THEME_ARROW_GIT_STATUS=1
+[ -z "$THEME_SHOW_GIT_BRANCH" ] && THEME_SHOW_GIT_BRANCH=1
 
 # Get git status
 get_git_status() {
 
   # Set defaults
+  git_branch=
   git_unstaged=0
   git_staged=0
 
   # Cache status if we're in a repo
-  if git_status=$(git status --porcelain 2>/dev/null); then
+  if git_status=$(git status --porcelain --branch 2>/dev/null); then
     in_git_repo=1
   else
     # If not stop everything
     in_git_repo=0
     return
   fi
+
+  # Get branch
+  git_branch=$(echo $git_status | grep '^##' | cut -c 4-)
 
   # Check for unstaged changes
   if echo $git_status | grep -q -e '^A[M|D]' -e '^M[M|D]' -e '^DM' -e '^R[M|D]' -e '^??' -e '^ M' -e '^ D'; then
@@ -94,3 +99,17 @@ theme_build_prompt() {
 
 # Rebuild prompt every time
 PROMPT='$(theme_build_prompt)'
+
+# Outputs prompt string
+theme_build_rprompt() {
+
+  # Branch
+  if [ $THEME_SHOW_GIT_BRANCH == 1 ] && [ "$git_branch" != "" ]; then
+    [[ $git_branch == 'master' ]] && prompt_colour=red || prompt_colour=black
+    echo -n "%F{$prompt_colour}[$git_branch]%f "
+  fi
+
+}
+
+# Rebuild prompt every time
+RPROMPT='$(theme_build_rprompt)'
