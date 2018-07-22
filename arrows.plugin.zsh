@@ -105,7 +105,7 @@ theme_build_rprompt() {
 
   # Branch
   if [[ $THEME_SHOW_GIT_BRANCH == 1 ]] && [[ "$git_branch" != "" ]]; then
-    [[ $git_branch == 'master' ]] && prompt_colour=red || prompt_colour=black
+    [[ $git_branch == 'master' ]] && prompt_colour=red || prompt_colour=blue
     echo -n "%F{$prompt_colour}[$git_branch]%f "
   fi
 
